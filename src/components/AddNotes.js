@@ -10,8 +10,8 @@ const {addNote} = context
 const [noteval, setNote] = useState({title: "", description: "", tags: ""})
 
 
-const handleclick = (event) => {
-    event.preventDefault(); 
+const handleclick = (e) => {
+    e.preventDefault(); 
     addNote(noteval.title, noteval.description, noteval.tags)
 }
 
