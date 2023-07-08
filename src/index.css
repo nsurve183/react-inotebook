@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.fa-trash-alt:before, .fa-trash-can:before {
+  color: red;
+}
+
+.fa-edit:before, .fa-pen-to-square:before {
+  color: blue;
+}
