@@ -9,7 +9,7 @@ import AddNotes from './AddNotes';
 const Notes = () => {
   const context = useContext(NoteContext);
   // console.log('Notes.js Comp', context)
-  const { notes, getUserNotes } = context
+  const { notes, getUserNotes, editNote } = context
 
   useEffect(() => {
     getUserNotes();
@@ -18,19 +18,21 @@ const Notes = () => {
 
 
   // Modal box for update
-  const [noteval, setNote] = useState({etitle: "", edescription: "", etags: ""})
+  const [noteval, setNote] = useState({id:"", etitle: "", edescription: "", etags: ""})
   // for open modal box with the help of javascript
   const ref = useRef(null);
+  const refClose = useRef(null)
 
   const updateNote = (currentNote) => {
     // understand ref hook from videoes
     ref.current.click();
-    setNote({etitle: currentNote.title, edescription: currentNote.description, etags: currentNote.tags})
+    setNote({id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etags: currentNote.tags})
   }
 
-  const handleclick = (e) => {
-    e.preventDefault(); 
+  const handleclick = () => { 
     console.log('updated note', noteval)
+    editNote(noteval.id, noteval.etitle, noteval.edescription, noteval.etags);
+    refClose.current.click()
 }
 
   const onchange = (event) => {
@@ -72,8 +74,8 @@ const Notes = () => {
             </div>
              {/* model body */}
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-primary" onClick={handleclick}>Update Note</button>
+              <button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-primary"  onClick={handleclick}>Update Note</button>
             </div>
           </div>
         </div>
