@@ -1,12 +1,18 @@
 
 import React from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
  const location = useLocation();
+ const navigate = useNavigate()
+
+ const hnadleLogout = () => {
+  localStorage.removeItem('token')
+  navigate('./login')
+ }
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
   <div className="container-fluid">
     <Link className="navbar-brand" to="/">InoteBook</Link>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,10 +27,11 @@ const Navbar = () => {
           <Link className={`nav-link ${location.pathname === '/about'}? "active": ""`} to="/about">About</Link>
         </li>
       </ul>
-      <form className="d-flex">
-        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-        <button className="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      {!localStorage.getItem('token')?<div>
+      <Link  to='/login' className='btn btn-primary btn-sm mx-3'>Login</Link>
+      <Link to='/signup' className='btn btn-primary  btn-sm'>Sign Up</Link> 
+      </div>: <button className='btn btn-primary btn-sm' onClick={hnadleLogout}>Logout</button>
+      }
     </div>
   </div>
 </nav>

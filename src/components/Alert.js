@@ -1,11 +1,19 @@
 
-import React from 'react'
+import React, { useContext } from 'react'
+import NoteContext from '../context/note/NoteContext'
 
-const Alert = (props) => {
+
+const Alert = () => {
+  const context = useContext(NoteContext)
+  const { errorAlert } = context
   return (
-    <div className='alert alert-primary'>
-      <h6>{props.massage}</h6>
+    <>
+    <div style={{height: '50px'}}>
+    {errorAlert && <div className={`alert alert-${errorAlert.type} alert-dismissible fade show `} data-bs-dismiss="alert" role="alert">
+        <strong>{errorAlert.massage}</strong> 
+      </div>} 
     </div>
+    </>
   )
 }
 

@@ -5,14 +5,21 @@ import React, { useContext, useEffect, useRef, useState} from 'react'
 import NoteContext from '../context/note/NoteContext';
 import NotesItem from './NotesItem';
 import AddNotes from './AddNotes';
+import { useNavigate } from 'react-router-dom';
 
 const Notes = () => {
   const context = useContext(NoteContext);
   // console.log('Notes.js Comp', context)
-  const { notes, getUserNotes, editNote } = context
+  const { notes, getUserNotes, editNote, showAlert, getUserData} = context
+  const navigate = useNavigate()
 
   useEffect(() => {
-    getUserNotes();
+    if(localStorage.getItem('token')){
+      getUserNotes();
+      getUserData()
+    }else{
+      navigate('./login')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -32,6 +39,7 @@ const Notes = () => {
   const handleclick = () => { 
     console.log('updated note', noteval)
     editNote(noteval.id, noteval.etitle, noteval.edescription, noteval.etags);
+    showAlert('Note Updated Successfully', 'success')
     refClose.current.click()
 }
 
@@ -60,11 +68,11 @@ const Notes = () => {
               <form>
                 <div className="mb-3">
                   <label htmlFor='etitle' className="form-label">Title</label>
-                  <input type="text" className="form-control" id="etitle" value={noteval.etitle} name='etitle' onChange={onchange} />
+                  <input type="text" className="form-control" id="etitle" value={noteval.etitle} name='etitle' onChange={onchange} minLength={3} required/>
                 </div>
                 <div className="mb-3">
                   <label htmlFor='edescription' className="form-label">Description</label>
-                  <input type="text" className="form-control" id="edescription" value={noteval.edescription} name='edescription' onChange={onchange} />
+                  <input type="text" className="form-control" id="edescription" value={noteval.edescription} name='edescription' onChange={onchange} minLength={5} required/>
                 </div>
                 <div className="mb-3">
                   <label htmlFor='etags' className="form-label">Tag</label>
@@ -85,6 +93,10 @@ const Notes = () => {
       <div className="row">
         <h2>Your Note</h2>
         {/* Notes prop use in the NotesItem Componenet */}
+        {/* notes.length===0 && "Notes Not Found" means if notes length is 0 * then after && code is run its like ternary operator*/}
+        <div className="container ms-2">
+        {notes.length===0 ? "Notes Not Found" : ""}
+        </div>
         {notes.map((note) => {
           return <NotesItem key={note._id} updateNote={updateNote} NotesData={note} />
         })}
